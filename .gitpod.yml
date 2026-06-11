@@ -1,0 +1,19 @@
+tasks:
+  - name: Preview
+    command: gp ports await 8080 && gp url 8080 && gp preview $(gp url 8080)/jenkins/
+
+  - name: Run Jenkins
+    init: |
+      # Download and Install Java 17.0.6-tem
+      yes Y | sdk install java 17.0.6-tem
+
+    command: |
+      mvn hpi:run -Dhost=0.0.0.0      
+
+vscode:
+  extensions:
+    - redhat.java
+    - vscjava.vscode-java-debug
+    - vscjava.vscode-java-test
+    - vscjava.vscode-maven
+    - vscjava.vscode-java-dependency
