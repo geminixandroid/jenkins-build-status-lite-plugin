@@ -35,7 +35,7 @@ public class JobBadgeAction implements Action, IconSpec {
 
     @Override
     public String getUrlName() {
-        return "buildStatusLite";
+        return "buildStatus";
     }
 
     public String getUrlEncodedFullName() {

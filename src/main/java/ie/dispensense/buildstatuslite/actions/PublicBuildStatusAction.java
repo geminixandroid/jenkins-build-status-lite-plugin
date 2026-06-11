@@ -25,14 +25,14 @@ import org.kohsuke.stapler.WebMethod;
 @Extension
 public class PublicBuildStatusAction implements UnprotectedRootAction {
     public static final Permission VIEW_STATUS = new Permission(
-            Item.PERMISSIONS, "ViewBuildStatusLite", Messages._ViewBuildStatusLite_Permission(), Item.READ, PermissionScope.ITEM);
+            Item.PERMISSIONS, "ViewStatus", Messages._ViewStatus_Permission(), Item.READ, PermissionScope.ITEM);
     private static final Jenkins jInstance = Jenkins.get();
 
     public PublicBuildStatusAction() throws IOException {}
 
     @Override
     public String getUrlName() {
-        return "buildStatusLite";
+        return "buildStatus";
     }
 
     @Override

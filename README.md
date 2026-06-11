@@ -10,10 +10,10 @@ Forked from [embeddable-build-status](https://github.com/jenkinsci/embeddable-bu
 ## Badge URL
 
 ```
-https://<jenkinsroot>/buildStatusLite/icon?job=<jobPath>[&style=...][&subject=...][&status=...]
+https://<jenkinsroot>/buildStatus/icon?job=<jobPath>[&style=...][&subject=...][&status=...]
 ```
 
-The endpoint requires `ViewBuildStatusLite` permission on the job (defaults to `Read`).
+The endpoint requires `ViewStatus` permission on the job (defaults to `Read`).
 
 A UI for generating the URL is available in the job sidebar under **Build Status Lite**.
 

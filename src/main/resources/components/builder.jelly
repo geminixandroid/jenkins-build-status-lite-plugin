@@ -2,7 +2,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:f="/lib/form" xmlns:t="/lib/hudson">
   <l:layout title="${%Build Status Lite} - ${it.project.displayName}" type="one-column">
     <j:set var="fullJobName" value="${it.urlEncodedFullName}"/>
-    <j:set var="publicBadge" value="${app.rootUrl}buildStatusLite/icon?job=${fullJobName}"/>
+    <j:set var="publicBadge" value="${app.rootUrl}buildStatus/icon?job=${fullJobName}"/>
 
     <l:header>
       <script src="${rootURL}/plugin/build-status-lite/css/builder.js" type="text/javascript" defer="true" />
