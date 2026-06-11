@@ -1,0 +1,128 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2013 Kohsuke Kawaguchi, Dominik Bartholdi
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.jenkinsci.plugins.buildstatuslite;
+
+import hudson.model.BallColor;
+import java.io.IOException;
+import java.util.Map;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
+
+public class ImageResolver {
+    private static final Map<String, String> STATUSES = Map.of(
+            "red", "failing",
+            "brightgreen", "passing",
+            "yellow", "unstable",
+            "aborted", "aborted",
+            "blue", "running",
+            "disabled", "disabled",
+            "notbuilt", "not run");
+
+    @Restricted(NoExternalUse.class)
+    public static String getStatus(BallColor color) {
+        String colorName = color.getIconName();
+
+        if (colorName.contains("anime")) {
+            return "running";
+        }
+
+        if (colorName.equals("blue")) {
+            colorName = "brightgreen";
+        }
+
+        return STATUSES.get(colorName);
+    }
+
+    public StatusImage getImage(
+            BallColor color,
+            String style,
+            String subject,
+            String status,
+            String colorName,
+            String animatedOverlayColor,
+            String link) {
+        String statusColorName = color.noAnime().toString();
+        String statusAnimatedOverlayColorName = null;
+
+        // check if "ball" is requested
+        if (style != null) {
+            String[] styleParts = style.split("-");
+            if (styleParts.length == 2 && "ball".equals(styleParts[0])) {
+                String url = color.getImageOf(styleParts[1]);
+                if (url == null) {
+                    url = color.getImageOf("32x32");
+                }
+
+                if (url != null) {
+                    try {
+                        return new StatusImage(url);
+                    } catch (IOException ioe) {
+                        return new StatusImage();
+                    }
+                }
+            }
+        }
+
+        if (color.isAnimated() && colorName == null) {
+            // animated means "running"
+            statusAnimatedOverlayColorName = "blue";
+        }
+
+        if ("blue".equals(statusColorName)) {
+            statusColorName = "brightgreen";
+        }
+
+        if (colorName == null) {
+            if ("aborted".equals(statusColorName)
+                    || "disabled".equals(statusColorName)
+                    || "notbuilt".equals(statusColorName)) {
+                colorName = "lightgrey";
+            } else {
+                colorName = statusColorName;
+            }
+
+            if (animatedOverlayColor == null) {
+                animatedOverlayColor = statusAnimatedOverlayColorName;
+            }
+        }
+
+        if (subject == null) {
+            subject = "build";
+        }
+
+        if (status == null) {
+            status = STATUSES.get(
+                    statusAnimatedOverlayColorName != null ? statusAnimatedOverlayColorName : statusColorName);
+            if (status == null) {
+                status = "unknown";
+            }
+        }
+
+        try {
+            return new StatusImage(subject, status, colorName, animatedOverlayColor, style, link);
+        } catch (IOException ioe) {
+            return new StatusImage();
+        }
+    }
+}
