@@ -1,4 +1,4 @@
-package ie.dispensense.buildstatuslite.actions;
+package ie.dispensense.buildStatus.actions;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -44,7 +44,7 @@ class PublicBuildStatusActionTest {
                         Functions.isWindows()
                                 ? new BatchFile("echo hello from a batch file")
                                 : new Shell("echo hello from a shell"));
-        String statusUrl = j.getURL().toString() + "buildStatusLite/icon";
+        String statusUrl = j.getURL().toString() + "buildStatus/icon";
         jobStatusUrl = statusUrl + "?job=" + job.getName();
     }
 
@@ -75,7 +75,7 @@ class PublicBuildStatusActionTest {
 
     @Test
     void testGetUrlName() throws IOException {
-        assertThat(new PublicBuildStatusAction().getUrlName(), is("buildStatusLite"));
+        assertThat(new PublicBuildStatusAction().getUrlName(), is("buildStatus"));
     }
 
     @Test
@@ -91,7 +91,7 @@ class PublicBuildStatusActionTest {
     @Test
     void doIconShouldReturnCorrectResponseForNullJob() throws Exception {
         try (JenkinsRule.WebClient webClient = j.createWebClient()) {
-            String url = j.getURL().toString() + "buildStatusLite/icon";
+            String url = j.getURL().toString() + "buildStatus/icon";
             JenkinsRule.JSONWebResponse json = webClient.getJSON(url);
             String result = json.getContentAsString();
             assertThat(result, containsString(PASSING_MARKER));
@@ -101,7 +101,7 @@ class PublicBuildStatusActionTest {
     @Test
     void doIconDotSvgShouldReturnCorrectResponseForNullJob() throws Exception {
         try (JenkinsRule.WebClient webClient = j.createWebClient()) {
-            String url = j.getURL().toString() + "buildStatusLite/icon.svg";
+            String url = j.getURL().toString() + "buildStatus/icon.svg";
             JenkinsRule.JSONWebResponse json = webClient.getJSON(url);
             String result = json.getContentAsString();
             assertThat(result, containsString(PASSING_MARKER));
