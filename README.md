@@ -27,8 +27,6 @@ Full path to the job. For **Multibranch Pipelines**, slashes in branch names can
 ?job=my-pipeline/feature/my-branch   ✔
 ```
 
-Any selector implemented via `JobSelectorExtensionPoint` is also accepted.
-
 If omitted, an untethered badge is returned (useful for testing styles).
 
 ### `style`
@@ -52,13 +50,7 @@ Override the badge label and value text.
 ?subject=Tests&status=passing
 ```
 
-Supports variable substitution — see [Parameter Resolver](#parameter-resolver) below.
-
-## Parameter Resolver
-
-`subject` and `status` support `${variable}` placeholders resolved from the latest build.
-
-Built-in variables:
+Supports variable substitution in `subject` and `status` — placeholders are resolved from the latest build:
 
 | Variable | Description |
 |---|---|
@@ -74,34 +66,4 @@ Built-in variables:
 Example:
 ```
 ?subject=Build ${params.BRANCH|main}&status=${displayName}
-```
-
-## Extension Points
-
-### `JobSelectorExtensionPoint`
-
-Implement to provide custom job lookup logic. The `job` query parameter is passed to each registered selector before falling back to the default path-based lookup.
-
-```java
-@Extension
-public class MyJobSelector implements JobSelectorExtensionPoint {
-    @Override
-    public Job select(String selector) {
-        // return a Job or null
-    }
-}
-```
-
-### `ParameterResolverExtensionPoint`
-
-Implement to provide custom `${variable}` resolution.
-
-```java
-@Extension
-public class MyResolver implements ParameterResolverExtensionPoint {
-    @Override
-    public String resolve(Actionable actionable, String parameter) {
-        // return resolved string or the original parameter if not handled
-    }
-}
 ```
