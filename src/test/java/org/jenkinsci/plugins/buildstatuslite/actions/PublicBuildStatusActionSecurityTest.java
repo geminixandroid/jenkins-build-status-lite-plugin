@@ -33,7 +33,8 @@ class PublicBuildStatusActionSecurityTest {
     @BeforeEach
     void createJob(JenkinsRule j, TestInfo info) throws IOException {
         this.j = j;
-        job = j.createFreeStyleProject("job-" + info.getTestMethod().orElseThrow().getName());
+        job = j.createFreeStyleProject(
+                "job-" + info.getTestMethod().orElseThrow().getName());
         job.getBuildersList()
                 .add(
                         Functions.isWindows()
@@ -65,8 +66,7 @@ class PublicBuildStatusActionSecurityTest {
         j.assertBuildStatusSuccess(build);
 
         try (ACLContext c = ACL.as(User.getById("alice", true))) {
-            HttpResponse response = new PublicBuildStatusAction()
-                    .doIcon(null, null, job.getName(), null, null, null);
+            HttpResponse response = new PublicBuildStatusAction().doIcon(null, null, job.getName(), null, null, null);
             assertThat(response.toString(), containsString("StatusImage"));
         }
     }

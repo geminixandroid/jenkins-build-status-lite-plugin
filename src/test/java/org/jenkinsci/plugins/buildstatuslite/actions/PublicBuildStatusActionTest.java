@@ -12,6 +12,7 @@ import hudson.model.Run;
 import hudson.tasks.BatchFile;
 import hudson.tasks.Shell;
 import java.io.IOException;
+import org.htmlunit.WebResponse;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,8 @@ class PublicBuildStatusActionTest {
 
     @BeforeEach
     void createJob(TestInfo info) throws IOException {
-        job = j.createFreeStyleProject("job-" + info.getTestMethod().orElseThrow().getName());
+        job = j.createFreeStyleProject(
+                "job-" + info.getTestMethod().orElseThrow().getName());
         job.getBuildersList()
                 .add(
                         Functions.isWindows()
@@ -48,11 +50,15 @@ class PublicBuildStatusActionTest {
         jobStatusUrl = statusUrl + "?job=" + job.getName();
     }
 
+    private static String getSvg(JenkinsRule.WebClient webClient, String url) throws Exception {
+        WebResponse response = webClient.getPage(url).getWebResponse();
+        return response.getContentAsString();
+    }
+
     @Test
     void testDoIconJobBefore() throws Exception {
         try (JenkinsRule.WebClient webClient = j.createWebClient()) {
-            JenkinsRule.JSONWebResponse json = webClient.getJSON(jobStatusUrl);
-            String result = json.getContentAsString();
+            String result = getSvg(webClient, jobStatusUrl);
             assertThat(result, containsString("<svg "));
             assertThat(result, not(containsString(SUCCESS_MARKER)));
             assertThat(result, containsString(NOT_RUN_MARKER));
@@ -65,8 +71,7 @@ class PublicBuildStatusActionTest {
         j.assertBuildStatusSuccess(build);
 
         try (JenkinsRule.WebClient webClient = j.createWebClient()) {
-            JenkinsRule.JSONWebResponse json = webClient.getJSON(jobStatusUrl);
-            String result = json.getContentAsString();
+            String result = getSvg(webClient, jobStatusUrl);
             assertThat(result, containsString("<svg "));
             assertThat(result, containsString(SUCCESS_MARKER));
             assertThat(result, not(containsString(NOT_RUN_MARKER)));
@@ -91,9 +96,7 @@ class PublicBuildStatusActionTest {
     @Test
     void doIconShouldReturnCorrectResponseForNullJob() throws Exception {
         try (JenkinsRule.WebClient webClient = j.createWebClient()) {
-            String url = j.getURL().toString() + "buildStatus/icon";
-            JenkinsRule.JSONWebResponse json = webClient.getJSON(url);
-            String result = json.getContentAsString();
+            String result = getSvg(webClient, j.getURL().toString() + "buildStatus/icon");
             assertThat(result, containsString(PASSING_MARKER));
         }
     }
@@ -101,9 +104,7 @@ class PublicBuildStatusActionTest {
     @Test
     void doIconDotSvgShouldReturnCorrectResponseForNullJob() throws Exception {
         try (JenkinsRule.WebClient webClient = j.createWebClient()) {
-            String url = j.getURL().toString() + "buildStatus/icon.svg";
-            JenkinsRule.JSONWebResponse json = webClient.getJSON(url);
-            String result = json.getContentAsString();
+            String result = getSvg(webClient, j.getURL().toString() + "buildStatus/icon.svg");
             assertThat(result, containsString(PASSING_MARKER));
         }
     }
@@ -113,8 +114,7 @@ class PublicBuildStatusActionTest {
         Run<?, ?> build = job.scheduleBuild2(0).get();
         j.assertBuildStatusSuccess(build);
         try (JenkinsRule.WebClient webClient = j.createWebClient()) {
-            JenkinsRule.JSONWebResponse json = webClient.getJSON(jobStatusUrl);
-            String result = json.getContentAsString();
+            String result = getSvg(webClient, jobStatusUrl);
             assertThat(result, containsString(PASSING_MARKER));
         }
     }

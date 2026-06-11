@@ -42,7 +42,7 @@ import org.kohsuke.stapler.StaplerResponse2;
 class StatusImage implements HttpResponse {
     public static final Logger LOGGER = Logger.getLogger(StatusImage.class.getName());
     private final byte[] payload;
-    private static final String PLGIN_NAME = "embeddable-build-status";
+    private static final String PLGIN_NAME = "build-status-lite";
 
     private static final Jenkins jInstance = Jenkins.get();
     private static final PluginWrapper plugin = jInstance.pluginManager.getPlugin(PLGIN_NAME);

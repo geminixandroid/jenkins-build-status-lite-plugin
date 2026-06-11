@@ -1,0 +1,5 @@
+<?jelly escape-by-default='true'?>
+<div>
+    Lightweight plugin that exposes a single unauthenticated endpoint for embedding build status badges.
+    Supports Multibranch Pipeline branches with slashes in their names without double URL-encoding.
+</div>

@@ -2,11 +2,11 @@ package org.jenkinsci.plugins.buildstatuslite.actions;
 
 import hudson.model.Action;
 import hudson.model.Job;
-import org.jenkinsci.plugins.buildstatuslite.ImageResolver;
-import org.jenkinsci.plugins.buildstatuslite.Messages;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import org.jenkins.ui.icon.IconSpec;
+import org.jenkinsci.plugins.buildstatuslite.ImageResolver;
+import org.jenkinsci.plugins.buildstatuslite.Messages;
 import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 
