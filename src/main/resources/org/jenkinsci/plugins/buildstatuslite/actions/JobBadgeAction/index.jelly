@@ -1,4 +1,73 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:ebs="/components">
-  <ebs:builder />
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:f="/lib/form" xmlns:t="/lib/hudson">
+  <l:layout title="${%Build Status Lite} - ${it.project.displayName}" type="one-column">
+    <j:set var="fullJobName" value="${it.urlEncodedFullName}"/>
+    <j:set var="publicBadge" value="${app.rootUrl}buildStatus/icon?job=${fullJobName}"/>
+
+    <l:header>
+      <script src="${rootURL}/plugin/build-status-lite/css/builder.js" type="text/javascript" defer="true" />
+      <link rel='stylesheet' href='${rootURL}/plugin/build-status-lite/css/design.css' type='text/css'/>
+    </l:header>
+
+    <l:main-panel>
+      <l:app-bar title="${%Build Status Lite}">
+      </l:app-bar>
+
+      <div class="ebs-builder"
+           data-public-badge-url="${publicBadge}"
+           style="--status: var(--${it.colorVariable})">
+        <div class="ebs-builder__controls">
+          <f:entry title="${%Style}">
+            <div class="jenkins-select">
+              <select class="jenkins-select__input ebs-input" name="style">
+                <option value="flat">Flat</option>
+                <option value="flat-square">Flat Square</option>
+                <option value="plastic">Plastic</option>
+              </select>
+            </div>
+          </f:entry>
+          <f:entry title="${%Subject}">
+            <input name="subject"
+                   class="jenkins-input ebs-input"
+                   maxlength="25"
+                   placeholder="build" />
+          </f:entry>
+          <div>
+            <f:entry title="${%Status}">
+              <input name="status"
+                     class="jenkins-input ebs-input"
+                     maxlength="25"
+                     placeholder="${it.status}" />
+            </f:entry>
+          </div>
+        </div>
+        <div class="ebs-builder__preview">
+          <img id="image-preview" alt="Badge" src="${publicBadge}" />
+          <div class="ebs-copy-container">
+            <div class="ebs-copy-container__controls">
+              <label for="type" class="jenkins-visually-hidden">Type</label>
+              <div class="jenkins-select">
+                <select class="jenkins-select__input ebs-input" id="type" name="type">
+                  <option value="markdown">Markdown</option>
+                  <option value="image">Image</option>
+                  <option value="html">HTML</option>
+                  <option value="asciidoc">Asciidoc</option>
+                  <option value="confluence">Confluence</option>
+                  <option value="xwiki">XWiki</option>
+                  <option value="rdoc">RDoc</option>
+                  <option value="textile">Textile</option>
+                  <option value="bitbucket">Bitbucket</option>
+                  <option value="text">Plain text</option>
+                </select>
+              </div>
+            </div>
+            <div class="jenkins-quote jenkins-quote--monospace">
+              <input readonly="true" />
+              <l:copyButton iconOnly="true" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </l:main-panel>
+  </l:layout>
 </j:jelly>
