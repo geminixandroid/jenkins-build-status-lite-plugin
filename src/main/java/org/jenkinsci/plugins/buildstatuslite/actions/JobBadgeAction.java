@@ -2,8 +2,6 @@ package org.jenkinsci.plugins.buildstatuslite.actions;
 
 import hudson.model.Action;
 import hudson.model.Job;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import org.jenkins.ui.icon.IconSpec;
 import org.jenkinsci.plugins.buildstatuslite.ImageResolver;
 import org.jenkinsci.plugins.buildstatuslite.Messages;
@@ -75,7 +73,7 @@ public class JobBadgeAction implements Action, IconSpec {
         if (project == null) {
             return "";
         }
-        return URLEncoder.encode(project.getFullName(), StandardCharsets.UTF_8);
+        return project.getFullName().replace("%2F", "/");
     }
 
     @Restricted(NoExternalUse.class)
