@@ -56,16 +56,14 @@ public class JobBadgeAction implements Action, IconSpec {
     }
 
     @WebMethod(name = "icon")
-    public HttpResponse doIcon(@QueryParameter String style,
-                               @QueryParameter String subject,
-                               @QueryParameter String status) {
+    public HttpResponse doIcon(
+            @QueryParameter String style, @QueryParameter String subject, @QueryParameter String status) {
         return PluginImpl.iconRequestHandler.handleIconRequestForJob(project, style, subject, status);
     }
 
     @WebMethod(name = "icon.svg")
-    public HttpResponse doIconDotSvg(@QueryParameter String style,
-                                     @QueryParameter String subject,
-                                     @QueryParameter String status) {
+    public HttpResponse doIconDotSvg(
+            @QueryParameter String style, @QueryParameter String subject, @QueryParameter String status) {
         return doIcon(style, subject, status);
     }
 
