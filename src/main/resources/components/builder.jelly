@@ -2,6 +2,8 @@
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:f="/lib/form" xmlns:t="/lib/hudson">
   <l:layout title="${%Build Status Lite} - ${it.project.displayName}" type="one-column">
     <j:set var="fullJobName" value="${it.urlEncodedFullName}"/>
+    <j:set var="jobUrl"      value="${it.url}"/>
+    <j:set var="badgeUrl"    value="${jobUrl}badge/icon"/>
     <j:set var="publicBadge" value="${app.rootUrl}buildStatus/icon?job=${fullJobName}"/>
 
     <l:header>
@@ -14,6 +16,8 @@
       </l:app-bar>
 
       <div class="ebs-builder"
+           data-job-url="${jobUrl}"
+           data-badge-url="${badgeUrl}"
            data-public-badge-url="${publicBadge}"
            style="--status: var(--${it.colorVariable})">
         <div class="ebs-builder__controls">
@@ -42,7 +46,7 @@
           </div>
         </div>
         <div class="ebs-builder__preview">
-          <img id="image-preview" alt="Badge" src="${publicBadge}" />
+          <img id="image-preview" alt="Badge" src="icon" />
           <div class="ebs-copy-container">
             <div class="ebs-copy-container__controls">
               <label for="type" class="jenkins-visually-hidden">Type</label>
