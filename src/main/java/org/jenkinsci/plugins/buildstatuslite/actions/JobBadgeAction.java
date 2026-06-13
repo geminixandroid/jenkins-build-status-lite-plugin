@@ -2,6 +2,8 @@ package org.jenkinsci.plugins.buildstatuslite.actions;
 
 import hudson.model.Action;
 import hudson.model.Job;
+import jakarta.servlet.ServletException;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import org.jenkins.ui.icon.IconSpec;
@@ -9,6 +11,8 @@ import org.jenkinsci.plugins.buildstatuslite.ImageResolver;
 import org.jenkinsci.plugins.buildstatuslite.Messages;
 import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
+import org.kohsuke.stapler.StaplerRequest2;
+import org.kohsuke.stapler.StaplerResponse2;
 
 @SuppressWarnings("rawtypes")
 public class JobBadgeAction implements Action, IconSpec {
@@ -36,6 +40,10 @@ public class JobBadgeAction implements Action, IconSpec {
     @Override
     public String getUrlName() {
         return "buildStatus";
+    }
+
+    public void doIndex(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException, ServletException {
+        req.getView(this, "index.jelly").forward(req, rsp);
     }
 
     public String getUrlEncodedFullName() {
