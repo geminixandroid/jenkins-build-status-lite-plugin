@@ -24,8 +24,11 @@ jobs:
       - name: Build HPI
         run: mvn package -DskipTests
 
+      - name: Rename HPI with version
+        run: mv target/build-status-lite.hpi target/build-status-lite-${{ github.ref_name }}.hpi
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: target/build-status-lite.hpi
+          files: target/build-status-lite-${{ github.ref_name }}.hpi
           generate_release_notes: true
